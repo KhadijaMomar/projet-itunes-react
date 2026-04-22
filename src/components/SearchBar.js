@@ -5,7 +5,7 @@ export default function SearchBar({ onSearch }) {
   const [type, setType] = useState("song");
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Évite de recharger la page
+    e.preventDefault(); 
     if (term.trim()) onSearch(term, type);
   };
 
