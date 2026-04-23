@@ -1,24 +1,27 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SearchBar from "./src/components/SearchBar";
 import ResultsList from "./src/components/ResultsList";
 import Library from "./src/components/Library";
 import Detail from "./src/components/Detail";
 import { searchItunes } from "./src/services/itunesApi";
 
-function App() {
+export default function App() {
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
   const [library, setLibrary] = useState([]);
 
-  // Charger la bibliothèque au démarrage
   useEffect(() => {
-    const saved = localStorage.getItem("library");
-    if (saved) setLibrary(JSON.parse(saved));
+    const loadData = async () => {
+      const saved = await AsyncStorage.getItem("library");
+      if (saved) setLibrary(JSON.parse(saved));
+    };
+    loadData();
   }, []);
 
-  // Sauvegarder dès que la bibliothèque change
   useEffect(() => {
-    localStorage.setItem("library", JSON.stringify(library));
+    AsyncStorage.setItem("library", JSON.stringify(library));
   }, [library]);
 
   const handleSearch = async (term, type) => {
@@ -37,41 +40,31 @@ function App() {
       item.id === id ? { ...item, rating } : item
     );
     setLibrary(updated);
-    
-    // Mise à jour visuelle immédiate si l'item est ouvert dans Detail
-    if (selected && selected.id === id) {
-      setSelected({ ...selected, rating });
-    }
+    if (selected && selected.id === id) setSelected({ ...selected, rating });
   };
 
-return (
-  <div className="app-wrapper">
-    <h1>My iTunes Seeker 🎵</h1>
-    <SearchBar onSearch={handleSearch} />
+  return (
+    <SafeAreaView style={styles.appWrapper}>
+      <Text style={styles.h1}>My iTunes Seeker 🎵</Text>
+      <SearchBar onSearch={handleSearch} />
+      
+      <ScrollView style={styles.container}>
+        <Text style={styles.h2}>Détail 🎧</Text>
+        <Detail item={selected} onAdd={addToLibrary} onRate={rateItem} />
 
-    <div className="app-container">
-      {/* Colonne 1 : Résultats */}
-      <div className="scroll-panel">
-        <h2>Résultats 🔍</h2>
+        <Text style={styles.h2}>Résultats 🔍</Text>
         <ResultsList results={results} onSelect={setSelected} />
-      </div>
 
-      {/* Colonne 2 : Détail (Maintenant scrollable aussi !) */}
-      <div className="scroll-panel">
-        <h2>Détail 🎧</h2>
-        <div className="detail-content">
-          <Detail item={selected} onAdd={addToLibrary} onRate={rateItem} />
-        </div>
-      </div>
-
-      {/* Colonne 3 : Bibliothèque */}
-      <div className="scroll-panel">
-        <h2>Ma bibliothèque 📚</h2>
+        <Text style={styles.h2}>Ma bibliothèque 📚</Text>
         <Library library={library} onSelect={setSelected} />
-      </div>
-    </div>
-  </div>
-);
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
-export default App;
+const styles = StyleSheet.create({
+  appWrapper: { flex: 1, backgroundColor: "#121212", padding: 10 },
+  h1: { fontSize: 24, color: "#fff", fontWeight: "bold", textAlign: "center", margin: 20 },
+  h2: { fontSize: 20, color: "#fa243c", fontWeight: "bold", marginTop: 20, marginBottom: 10 },
+  container: { flex: 1 }
+});

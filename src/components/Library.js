@@ -1,9 +1,10 @@
+import { View, Text } from "react-native";
 import TrackItem from "./TrackItem";
 
 export default function Library({ library, onSelect }) {
   return (
-    <div>
-      {library.length === 0 && <p>Aucun morceau sauvegardé</p>}
+    <View>
+      {library.length === 0 && <Text>Aucun morceau sauvegardé</Text>}
 
       {library.map((item) => (
         <TrackItem
@@ -12,6 +13,9 @@ export default function Library({ library, onSelect }) {
           onSelect={onSelect}
         />
       ))}
-    </div>
+    </View>
   );
 }
+
+
+
