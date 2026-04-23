@@ -77,35 +77,42 @@ Un explorateur de musique moderne utilisant l'API publique d'iTunes. Cette appli
 ## 🚀 Installation et Lancement
 
 1. **Cloner le projet**
-   ```bash
-   git clone [URL_DE_TON_DEPOT]
-   cd itunes-seeker
+  
+   git clone https://github.com/KhadijaMomar/projet-itunes-react.git
+   cd projet-itunes-react
 
-    Installer les dépendances
-    Bash
-
+ 
+2. **Installer les dépendances**
+ 
     npm install
 
-    Lancer l'application
-    Bash
+2. **Lancer l'application**
+ npm start
 
-    npm start
-    # ou si vous utilisez Vite
-    npm run dev
-
-📂 Structure du Projet
+## 📂 Structure du Projet
 
 L'architecture est organisée pour séparer la logique de données de l'interface utilisateur :
 Plaintext
-
+```
+├── assets/                
 ├── src/
-│   ├── components/       # Composants UI (SearchBar, Results, Library, etc.)
-│   ├── services/         # Logique d'appel à l'API iTunes
-│   ├── App.css           # Styles globaux et variables Dark Mode
-├── App.js                # Composant principal (gestion d'état)
-└── README.md
-
-🛠️ Technologies utilisées
+│   ├── components/         # Composants d'interface (UI) natifs
+│   │   ├── Detail.js       # Affichage complet, lecture audio (expo-av) et notation
+│   │   ├── Library.js      # Liste des morceaux sauvegardés par l'utilisateur
+│   │   ├── Rating.js       # Système d'étoiles interactif (TouchableOpacity)
+│   │   ├── ResultsList.js  # Liste de rendu pour les résultats de recherche
+│   │   ├── SearchBar.js    # Champ de saisie et sélecteur Titre/Artiste
+│   │   └── TrackItem.js    # Carte individuelle d'un morceau (Ligne de liste)
+│   │
+│   └── services/           # Logique de données
+│       └── itunesApi.js    # Appels fetch vers l'API iTunes et formatage des données
+│
+├── App.js                  # Point d'entrée : Gestion des états globaux et Layout
+├── app.json                # Configuration Expo (nom, version, icône)
+├── package.json            # Dépendances (expo-av, async-storage, react-native, etc.)
+└── README.md               # Documentation du projet
+```
+## 🛠️ Technologies utilisées
 
     React.js : Framework principal pour l'interface.
 
@@ -115,7 +122,7 @@ Plaintext
 
     LocalStorage API : Pour la sauvegarde des données utilisateur sans base de données externe.
 
-📝 Utilisation
+## 📝 Utilisation
 
     Saisissez un nom d'artiste (ex: Daft Punk) ou un titre (ex: Blinding Lights) dans la barre de recherche.
 
